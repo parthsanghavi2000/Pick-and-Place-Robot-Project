@@ -40,7 +40,7 @@ class PotentialFieldPlanner:
         optimizer has converged
         """
 
-        # YOU MAY NEED TO CHANGE THESE PARAMETERS
+       
 
         # solver parameters
         self.tol = tol
@@ -78,13 +78,6 @@ class PotentialFieldPlanner:
         self.DhruvPlot = 0
 
 
-
-    ######################
-    ## Helper Functions ##
-    ######################
-    # The following functions are provided to you to help you to better structure your code
-    # You don't necessarily have to use them. You can also edit them to fit your own situation 
-
     def attractive_force(self,target, current, i):
         """
         Helper function for computing the attactive force between the current position and
@@ -100,7 +93,6 @@ class PotentialFieldPlanner:
         from the current position to the target position 
         """
 
-        ## STUDENT CODE STARTS HERE
         att_f = np.zeros((3, 1)) 
         dist = np.linalg.norm(target-current)
 
@@ -109,7 +101,6 @@ class PotentialFieldPlanner:
             att_f = self.zeta[i]*(target - current)
         else:
             att_f = self.d*self.zeta[i]*(target - current)/dist
-        ## END STUDENT CODE
 
         return att_f
 
@@ -129,9 +120,6 @@ class PotentialFieldPlanner:
         rep_f - 3x1 numpy array representing the force vector that pushes the joint 
         from the obstacle
         """
-
-        ## STUDENT CODE STARTS HERE
-
         rep_f = np.zeros((3, 1))
         if pho>self.pho_0:
             return rep_f
@@ -140,8 +128,6 @@ class PotentialFieldPlanner:
             pho = 1e-10
 
         rep_f = (self.eta*((1/pho) - 1/self.pho_0)*-unitvec/(pho**2))
-
-        ## END STUDENT CODE
 
         return rep_f
 
@@ -168,8 +154,6 @@ class PotentialFieldPlanner:
          @ https://stackoverflow.com/questions/5254838/
          calculating-distance-between-a-point-and-a-rectangular-box-nearest-point
         """
-        # THIS FUNCTION HAS BEEN FULLY IMPLEMENTED FOR YOU
-
         # Get box info
         boxMin = np.array([box[0], box[1], box[2]])
         boxMax = np.array([box[3], box[4], box[5]])
@@ -212,9 +196,6 @@ class PotentialFieldPlanner:
         joint_forces - 3x7 numpy array representing the force vectors on each 
         joint/end effector
         """
-
-        ## STUDENT CODE STARTS HERE
-
         joint_forces = np.zeros((3, 7)) 
         F_att = np.zeros((3,7))
         F_rep = np.zeros((3,7))
@@ -233,7 +214,6 @@ class PotentialFieldPlanner:
 
         #Store in the array
         joint_forces = np.add(F_att, F_rep)    
-        ## END STUDENT CODE
 
         return joint_forces
     
@@ -251,9 +231,6 @@ class PotentialFieldPlanner:
         OUTPUTS:
         joint_torques - 1x7 numpy array representing the torques on each joint 
         """
-
-        ## STUDENT CODE STARTS HERE
-
         joint_torques = np.zeros((1, 7))
 
         #For each joints
@@ -266,8 +243,6 @@ class PotentialFieldPlanner:
             t = np.vstack((t,np.zeros((7-(i+1),1))))
 
             joint_torques = np.add(joint_torques,t.T)
-
-        ## END STUDENT CODE
 
         return joint_torques
 
@@ -289,11 +264,8 @@ class PotentialFieldPlanner:
 
         """
 
-        ## STUDENT CODE STARTS HERE
 
         distance = np.array([np.linalg.norm(target[i]-current[i]) for i in range(7)])
-
-        ## END STUDENT CODE
 
         return distance
     
@@ -312,8 +284,6 @@ class PotentialFieldPlanner:
         dq - 1x7 numpy array. a desired joint velocity to perform this task
         """
 
-        ## STUDENT CODE STARTS HERE
-
         dq = np.zeros((1, 7))
         
         o_current,current_pos = FK().forward(q)
@@ -326,8 +296,6 @@ class PotentialFieldPlanner:
         joint_torques = PotentialFieldPlanner.compute_torques(joint_forces,q)
         
         dq = self.alpha*(joint_torques)/np.linalg.norm(joint_torques)
-
-        ## END STUDENT CODE
 
         return dq
 
@@ -415,7 +383,6 @@ class PotentialFieldPlanner:
         obstacle = deepcopy(self.obstacle)
         while True:
             self.itr = itr
-            ## STUDENT CODE STARTS HERE
 
             #!==Debugging and Datalogging==!#
             #Debugger
@@ -556,7 +523,6 @@ class PotentialFieldPlanner:
             #Increase iteration
             itr = itr+1
 
-            ## END STUDENT CODE
         print(randomwalk, itr)
         return q_path,self.data_logger
 
